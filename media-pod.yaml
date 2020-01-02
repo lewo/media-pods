@@ -1,0 +1,196 @@
+# Generation of Kubernetes YAML is still under development!
+#
+# Save the output of this file and use kubectl create -f to import
+# it into Kubernetes.
+#
+# Created with podman-1.6.2
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2019-11-17T06:06:51Z"
+  labels:
+    app: media-pod
+  name: media-pod
+spec:
+  containers:
+  - env:
+    - name: PATH
+      value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    - name: TERM
+      value: xterm
+    - name: HOSTNAME
+      value: media-pod
+    - name: container
+      value: podman
+    - name: PLEX_DOWNLOAD
+      value: https://downloads.plex.tv/plex-media-server-new
+    - name: PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR
+      value: /config/Library/Application Support
+    - name: PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS
+      value: "6"
+    - name: PGID
+      value: "1000"
+    - name: NVIDIA_DRIVER_CAPABILITIES
+      value: compute,video,utility
+    - name: PLEX_ARCH
+      value: amd64
+    - name: HOME
+      value: /root
+    - name: LANGUAGE
+      value: en_US.UTF-8
+    - name: DEBIAN_FRONTEND
+      value: noninteractive
+    - name: PLEX_MEDIA_SERVER_HOME
+      value: /usr/lib/plexmediaserver
+    - name: PLEX_MEDIA_SERVER_INFO_VENDOR
+      value: Docker
+    - name: PLEX_MEDIA_SERVER_INFO_DEVICE
+      value: Docker Container (LinuxServer.io)
+    - name: LANG
+      value: en_US.UTF-8
+    - name: PLEX_MEDIA_SERVER_USER
+      value: abc
+    - name: PUID
+      value: "1000"
+    - name: TZ
+      value: Australia/Brisbane
+    image: docker.io/linuxserver/plex:latest
+    name: plex
+    ports:
+    - containerPort: 32400
+      hostPort: 32400
+      protocol: TCP
+    - containerPort: 32469
+      hostPort: 32469
+      protocol: TCP
+    - containerPort: 5353
+      hostPort: 5353
+      protocol: TCP
+    - containerPort: 1900
+      hostPort: 1900
+      protocol: TCP
+    - containerPort: 8989
+      hostPort: 8989
+      protocol: TCP
+    - containerPort: 9091
+      hostPort: 9091
+      protocol: TCP
+    resources: {}
+    securityContext:
+      allowPrivilegeEscalation: true
+      capabilities: {}
+      privileged: false
+      readOnlyRootFilesystem: false
+    volumeMounts:
+    - mountPath: /config
+      name: home-leigh-dev-docker-config
+    - mountPath: /downloads
+      name: media-external-Downloads
+    - mountPath: /tv
+      name: media-external-TV
+    - mountPath: /movies
+      name: media-external-Movies
+    workingDir: /
+  - env:
+    - name: PATH
+      value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    - name: TERM
+      value: xterm
+    - name: HOSTNAME
+      value: media-pod
+    - name: container
+      value: podman
+    - name: XDG_CONFIG_HOME
+      value: /config/xdg
+    - name: SONARR_BRANCH
+      value: master
+    - name: PUID
+      value: "1000"
+    - name: PGID
+      value: "1000"
+    - name: LANG
+      value: en_US.UTF-8
+    - name: LANGUAGE
+      value: en_US.UTF-8
+    - name: TZ
+      value: Australia/Brisbane
+    - name: HOME
+      value: /root
+    image: docker.io/linuxserver/sonarr:latest
+    name: sonarr
+    resources: {}
+    securityContext:
+      allowPrivilegeEscalation: true
+      capabilities: {}
+      privileged: false
+      readOnlyRootFilesystem: false
+    volumeMounts:
+    - mountPath: /config
+      name: home-leigh-dev-docker-config
+    - mountPath: /downloads
+      name: media-external-Downloads
+    - mountPath: /tv
+      name: media-external-TV
+    workingDir: /
+  - env:
+    - name: PATH
+      value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    - name: TERM
+      value: xterm
+    - name: HOSTNAME
+      value: media-pod
+    - name: container
+      value: podman
+    - name: LANG
+      value: en_US.UTF-8
+    - name: HOME
+      value: /config
+    - name: LANGUAGE
+      value: en_US.UTF-8
+    - name: PYTHONIOENCODING
+      value: utf-8
+    - name: PUID
+      value: "1000"
+    - name: PGID
+      value: "1000"
+    - name: TZ
+      value: Australia/Brisbane
+    image: docker.io/linuxserver/sabnzbd:latest
+    name: sabnzbd
+    resources: {}
+    securityContext:
+      allowPrivilegeEscalation: true
+      capabilities: {}
+      privileged: false
+      readOnlyRootFilesystem: false
+    volumeMounts:
+    - mountPath: /downloads
+      name: media-external-Downloads
+    - mountPath: /incomplete-downloads
+      name: media-external-Incomplete
+    - mountPath: /config
+      name: home-leigh-dev-docker-config
+    workingDir: /
+  volumes:
+  - hostPath:
+      path: /media/external/Incomplete
+      type: Directory
+    name: media-external-Incomplete
+  - hostPath:
+      path: /home/leigh/dev/docker/config
+      type: Directory
+    name: home-leigh-dev-docker-config
+  - hostPath:
+      path: /media/external/Downloads
+      type: Directory
+    name: media-external-Downloads
+  - hostPath:
+      path: /media/external/TV
+      type: Directory
+    name: media-external-TV
+  - hostPath:
+      path: /media/external/Movies
+      type: Directory
+    name: media-external-Movies
+status: {}
+
